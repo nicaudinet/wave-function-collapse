@@ -1,14 +1,39 @@
 import pygame
 import numpy as np
 import sys
+import copy
+import random
 
-FPS = 11
+from lib.tile import Tile
+from lib.grid import Grid
 
-CELL_SIZE = 10
-HEIGHT = 100
-WIDTH = 100
-WINDOW_HEIGHT = HEIGHT * CELL_SIZE
-WINDOW_WIDTH = WIDTH * CELL_SIZE
+FPS = 20
+
+TILE_SIZE = 50
+DIM = 10
+WINDOW_HEIGHT = DIM * TILE_SIZE
+WINDOW_WIDTH = DIM * TILE_SIZE
+
+images = {
+    'blank': pygame.image.load("tiles/demo/blank.png"),
+    'up': pygame.image.load("tiles/demo/up.png"),
+    'right': pygame.image.load("tiles/demo/right.png"),
+    'down': pygame.image.load("tiles/demo/down.png"),
+    'left': pygame.image.load("tiles/demo/left.png")
+    }
+
+tiles = [
+    Tile(images['blank'], [0,0,0,0]),
+    Tile(images['up'], [1,1,0,1]),
+    Tile(images['right'], [1,1,1,0]),
+    Tile(images['down'], [0,1,1,1]),
+    Tile(images['left'], [1,0,1,1])
+    ]
+
+for tile in tiles:
+    tile.analyze(tiles)
+    
+grid = Grid(DIM, tiles)
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -34,7 +59,8 @@ while not exit:
     clock.tick(FPS)
 
     if animate:
-        pass
+        grid.draw(canvas)
+        grid.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
